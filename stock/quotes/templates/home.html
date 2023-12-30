@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    {% if ticker %}
+        <p>Stock Ticker: {{ ticker }}</p>
+    {% endif %}
+
+    {% if api %}
+        {% if api == 'Error...' or not api.0 %}
+            <p>Please Key in an existing Ticker</p>
+        {% else %}
+            {% with stock_data=api.0 %}
+                <div class="card text-white bg-dark mb-3" style="max-width: 30rem;">
+                    <strong>
+                        <div class="card-header text-primary bg-dark mb-3"><h2>QUOTE: {{ stock_data.symbol }}</strong></h2>
+                    </div>
+                    <div class="card-body text-light">
+                        <h3 class="card-title">{{ stock_data.companyName }} <em>({{ stock_data.symbol }})</em><br/>
+                            <p class="card-text">
+                                <h5><strong>Price: ${{ stock_data.latestPrice }}<br/><br/></h5></strong>
+                                Previous Close: ${{ stock_data.previousClose }}<br/>
+
+                                Market Cap: {{ stock_data.marketCap }}<br/>
+                                Volume: {{ stock_data.latestVolume }}<br/>
+                                PE Ratio: {{ stock_data.peRatio }} </br/></br/>
+
+                                Percent Change: {{ stock_data.changePercent }}</br/>
+                                YTD Change: {{ stock_data.ytdChange }}<br/></br/>
+
+                                52Wk High: {{ stock_data.week52High }}<br/>
+                                52Wk Low: {{ stock_data.week52Low }}<br/></br/>
+
+                                Open: ${{ stock_data.open }}<br/>
+                                High: ${{ stock_data.high }}<br/>
+                                Low: ${{ stock_data.low }}<br/>
+                                Close: ${{ stock_data.close }}<br/>
+                            </p>
+                    </div>
+                </div>
+            {% endwith %}
+        {% endif %}
+    {% endif %}
+{% endblock %}

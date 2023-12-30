@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <style>
+        .card {
+            height: 100%;
+            position: relative; /* Add position relative to the card */
+        }
+
+        .card-img-top {
+            object-fit: cover;
+            height: 200px;
+        }
+
+        .main {
+            height: 200px; /* Set the fixed height you desire */
+            overflow: hidden;
+        }
+
+    </style>
+
+    <div class="container">
+        <h1>Latest Business News</h1>
+
+        <div class = "mb-3"> 
+            <form action="{% url 'search_news' %}" method="POST" class="row g-2">
+                {% csrf_token %}
+                <div class="col">
+                    <input class="form-control" type="search" placeholder="Search News" aria-label="Search News" name="query">
+                </div>
+                <div class="col-auto">
+                    <button type="submit" class="btn btn-dark">Search</button>
+                </div>
+            </form>
+        </div>
+
+        <h3>Search Results for "{{ query }}"</h3>
+
+
+        <div class="row">
+            {% for article in articles %}
+                <div class="col-md-6 mb-4">
+                    <div class="card text-white bg-dark">
+                        {% if article.urlToImage %}
+                            <img src="{{ article.urlToImage }}" class="card-img-top" alt="{{ article.title }}">
+                        {% else %}
+                            <img src="{% static 'default.webp' %}" class="card-img-top" alt="Default Image">
+                        {% endif %}
+                        <div class="card-body main">
+                            <h3 class="card-title">{{ article.title }}</h3>
+                            <p class="card-text">{{ article.description }}</p>
+                        </div>
+                        <div class="card-body">
+                            <a href="{{ article.url }}">Read more</a>
+                        </div>
+                        <div class="card-footer">
+                            <small class="text-muted">Published on {{ article.publishedAt }}</small>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    <p><a href="{% url 'news' %}" class="btn btn-secondary">Back to News</a></p>
+{% endblock %}
